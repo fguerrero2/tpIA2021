@@ -1,5 +1,20 @@
+.App-bodyAdmin{
+  background-color: gray;
+  display: 'flex'; 
+  margin-Top:spacing(8);
+  margin-Bottom: spacing(2);
+
+ }
+ .App-header {
+  background-color: #F2F3F5;
+  margin-Top:spacing(8);
+  margin-Bottom: spacing(2);
+  display: 'flex'; 
+  
+  }
 .App {
   text-align: center;
+  background-color: green;
 }
 
 .App-logo {
@@ -7,32 +22,36 @@
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.App-Portada {
+  height: auto; 
+  pointer-events: auto;
+  max-width: 100%;
+  background-color: #d0d1d3;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+
+.App-Body {
+  margin-top: 4vmin;
+  text-align: center;
+  background-color: red;
+  
 }
 
 .App-link {
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.App-LogoIsabella{
+  width: 100%;
+  max-width: 160px;
+  height: 60px; 
+  margin-right: 3vmin;
+}
+
+.App-Footer {
+
+  background-color:white;
+  height: 60px; 
+  padding: spacing(3,2);
+  margin-top: auto;
 }
