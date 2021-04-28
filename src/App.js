@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-
 import './App.css';
 import Login from './FPages/Login';
 import Nosotros from './FPages/Nosotros';
@@ -15,7 +14,7 @@ import AdminProductos from './FPages/AdminProductos';
 class App extends Component {
   render() {
     return (
-        <BrowserRouter  >
+        <BrowserRouter>
             <Switch>
                <Redirect from="/" exact to="/home"/ > 
                <Route path="/home" exact component={Home}/>
@@ -26,8 +25,7 @@ class App extends Component {
                <Route path="/carrito" exact component={Carrito}/>
                <Route path="/Admin_OrdenesCompra" exact component={AdminOrden}/>
                <Route path="/Admin_Productos" exact component={AdminProductos}/>
-           </Switch>
-          
+           </Switch>          
         </BrowserRouter>
     );
   }

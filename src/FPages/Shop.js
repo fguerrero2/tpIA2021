@@ -45,6 +45,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function ccyFormat(num) {
+  return `${num.toFixed(2)}`;
+}
+
 function Shop() {
   const classes = useStyles();
   let items = products;
@@ -63,14 +67,14 @@ function Shop() {
                   <CardMedia
                     className={classes.cardMedia}
                     image= {x.img}
-                    title= {x.title}
+                    name= {x.name}
                   />
                   <CardContent className={classes.cardContent}>
                     <Typography >
-                      {x.title}
+                      {x.name}
                     </Typography>
                     <Typography>
-                      Precio: $  {x.price}
+                      Precio: $  {ccyFormat (x.price)}
                     </Typography>
                   </CardContent>
                   <CardActions>
