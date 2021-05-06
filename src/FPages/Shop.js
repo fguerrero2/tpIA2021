@@ -1,7 +1,6 @@
 import '../App.css';
 import NavBar from '../components/NavBar';
 import { Container, Grid } from '@material-ui/core';
-import products from '../Data/fixtures.js';
 import FooterBar from '../components/footerBar';
 import React from 'react';
 import Button from '@material-ui/core/Button';
@@ -11,6 +10,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import products from '../Data/fixtures.js';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -62,6 +62,7 @@ function Shop() {
           {/* End hero unit */}
           <Grid container spacing={4}>
             {items.map((x) => (
+              
               <Grid item key={x} xs={12} sm={6} md={4}>
                 <Card className={classes.card}>
                   <CardMedia
@@ -78,7 +79,7 @@ function Shop() {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small" color="primary">
+                    <Button size="small" color="primary" link href={`/productodetalles/${x.product_id}`}>
                        Comprar
                     </Button>
                   </CardActions>
