@@ -13,7 +13,7 @@ const order = {
                 name: "Jean Clara",
                 price: 6599.0,
                 size: ["M", "S", "L"],
-                colors: ["azul", "rojo", "verde"],
+                colors: ["AZUL", "ROJO", "VERDE"],
             }
         },
         {
@@ -28,7 +28,7 @@ const order = {
                 name: "Jean Clara",
                 price: 6599.0,
                 size: ["M", "S", "L"],
-                colors: ["azul", "rojo", "verde"],
+                colors: ["AZUL", "ROJO", "VERDE"],
             }
         },
     ]
@@ -58,6 +58,6 @@ export default order;
                 name: "Remera Wanda",
                 price: 4599.0,
                 size: ["M", "S", "L"],
-                colors: ["azul", "rojo", "verde"],
+                colors: ["AZUL", "ROJO", "VERDE"],
             }
         }, */
