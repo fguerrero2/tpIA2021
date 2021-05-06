@@ -30,8 +30,13 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(4),
   },
   cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
+    paddingTop: theme.spacing(6),
+    paddingBottom: theme.spacing(6),
+  },
+  cardBoton: {
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    paddingLeft: theme.spacing(80),
   },
   card: {
     height: '100%',
@@ -67,9 +72,11 @@ function AdminProductos() {
         <Typography gutterBottom variant="h5"  className={classes.name} >
           Lista de Productos 
         </Typography>
-        <Button align="right " variant="contained" color="primary">
+        <Container className={classes.cardBoton}   maxWidth="lg" >
+        <Button align="right " variant="contained" color="primary" Link href="/productoagregar">
           Agregar Producto
         </Button>
+        </Container>
         <Table size="small" className={classes.heroContent}>
           <TableHead>
             <TableRow>
@@ -79,6 +86,7 @@ function AdminProductos() {
               <TableCell>Categoria </TableCell>
               <TableCell>Stock</TableCell>
               <TableCell align="right">Precio</TableCell>
+              <TableCell >   </TableCell>
               <TableCell >   </TableCell>
            </TableRow>
           </TableHead>
