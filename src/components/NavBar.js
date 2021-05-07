@@ -46,7 +46,7 @@ const NavBar = () => {
       </Grid>
       <Grid item xs="6">
           <Box component="span" m={5}>
-            <Link  variant="h6" underline="none" color="inherit" className={classes.rightLink}  href="/shop" >  {'Producto  '}   </Link>
+            <Link  variant="h6" underline="none" color="inherit" className={classes.rightLink}  href="/shop" >  {'Productos  '}   </Link>
             </Box>
           <Box component="span" m={5}>
              <Link variant="h6" underline="none" color="inherit" className={classes.rightLink} href="/nosotros"> Nosotros </Link>

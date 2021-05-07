@@ -14,7 +14,7 @@ function Home(props) {
       <NavBar /> 
     </div>
     <div className="App-header">
-    <Container fixed>
+    <Container  maxWidth="md" /*fixed*/>
         <img  src={Portada} className="App-Portada"  alt="Portada"  /> 
   
 

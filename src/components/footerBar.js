@@ -32,7 +32,7 @@ const FooterBar = () => {
             </Box>
         </Grid>
         <Grid item xs="3"> 
-            &copy; 2021, made with Grupo 5 API
+            &copy; 2021, made with Grupo 7 API
         </Grid> 
       </Grid>
     </Typography> 
