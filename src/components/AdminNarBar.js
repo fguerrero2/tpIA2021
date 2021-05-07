@@ -48,10 +48,15 @@ const AdminNavBar = () => {
             <Link  variant="h6" underline="none" color="inherit" className={classes.rightLink}  href="/Admin_OrdenesCompra" >  {'Ordenes de Compra  '}   </Link>
             </Box>
           <Box component="span" m={5}>
-             <Link variant="h6" underline="none" color="inherit" className={classes.rightLink} href="/Admin_Productos"> Productos </Link>
+             <Link variant="h6" underline="none" color="inherit" className={classes.rightLink} href="/Admin_Productos"> Lista Productos </Link>
           </Box>
       </Grid> 
-      <Grid item xs="3" >
+      <Grid item xs="2" >
+        <div align="right" >
+				  <p>Usuario: Admin</p>
+        </div>
+      </Grid> 
+      <Grid item xs="1" >
         <div align="right" >
           <IconButton color="#607d8b" aria-label="add to shopping cart" href="/#" >
             <PersonIcon />
