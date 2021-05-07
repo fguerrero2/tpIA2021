@@ -108,7 +108,7 @@ function Registrarse() {
                 Registrarse
               </Button>  
         </Container>
-
+        <Box mt={30}> </Box>
   </Container>
   </div> 
      <div  > 

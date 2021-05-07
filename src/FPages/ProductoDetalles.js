@@ -11,6 +11,7 @@ import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import { useParams } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
+import Box from '@material-ui/core/Box';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -47,53 +48,59 @@ function ProductoDetalles (){
         <div component="form">
 		{ products.filter((filtro) => filtro.product_id == id).map(comprar =>(
 		<Container component="main" maxWidth="md"  > 
-		<Grid container direction="row" align="center" alignItems="center" justify="center" className={classes.root}>
-			<Grid item xs={12}>
+		<Grid container direction="row" className={classes.root} spacing={2} >
+			<Grid item xs={12} align="center" alignItems="center" justify="center" >
 				<h1>{comprar.name}</h1>
 			</Grid>
 			<Grid item xs={6} className={classes.img}>
 				<img src={comprar.img} alt="product" />
 			</Grid>
-			<Grid item xs={5} className={classes.txt}>
-				<h2 className={classes.made}>CATEGORIA: {comprar.categoria}</h2>
-				<h3>Precio: ${comprar.price}</h3>
+			<Grid item xs={5} className={classes.txt} >
+				<h3 className={classes.made}>Categoria: {comprar.categoria}</h3>
 				<p>
 					{" "}
 					<strong>Informacion adicional del producto: </strong>
 				</p>
 				<p>{comprar.descripcion}</p>
 				<p>{comprar.composicion}</p>
-				<Grid item xs={4} className={classes.txt}>
+				<h3>Precio: ${comprar.price}</h3>
+				<Grid item xs={4} className={classes.txt} spacing={2} >
 					<TextField id="select" label="TALLE" value="M" select>
 						{comprar.size.map((talle) => (
 							<MenuItem value={talle}>{talle}</MenuItem>
 						))}
 					</TextField>				
 				</Grid>
-				<Grid item xs={4} className={classes.txt}>
+				<Grid item xs={4} className={classes.txt} spacing={2}>
 					<TextField id="select" label="COLOR" value={comprar.colors.[1]} select>
 						{comprar.colors.map((colores) => (
 							<MenuItem value={colores}>{colores}</MenuItem>
 						))}
 					</TextField>				
 				</Grid>
-				<Grid item xs={12} className={classes.txt}>
-				<Button component={Link} to="/shop" variant="contained" className={classes.btn}>
-					Regresar a la tienda 
-				</Button>
-				</Grid>
-				<Button
-					disabled={  comprar.stock = 0 ? true : false}
-					variant="contained"
-					color="primary"
-					className={classes.btn}
-				>
-					<Icon>
-						<AddShoppingCartIcon /> 
-					</Icon>
-				</Button>
-			</Grid>
+				<Grid container item xs={12} className={classes.txt}>
+					<Grid  item xs={6}>
+						<Button component={Link} to="/shop" variant="contained" className={classes.btn}>
+							Regresar
+						</Button>
+					</Grid>
+					<Grid item xs={6}  > <Button
+						disabled={  comprar.stock = 0 ? true : false}
+						variant="contained"
+						color="primary"
+						className={classes.btn}
+					>
+						<Icon>
+							<AddShoppingCartIcon /> 
+						</Icon>
+					</Button>
+					</Grid>
+					</Grid> 
+			  </Grid>
 		</Grid>
+		<Box mt={20}>
+
+		</Box>
 		</Container>
 		))}
     </div> 

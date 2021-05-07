@@ -68,9 +68,9 @@ const orderlist = [
     ]
     },
     {
-    nro_orden:"120",
+    nro_orden:"125",
     usuario:"yessi.gallo",
-    fecha:"25/03/2020 21:00",
+    fecha:"26/03/2020 21:00",
     total: 17700.0,
     estado:"Pendiente",
     items: [
@@ -109,7 +109,7 @@ const orderlist = [
     {
         nro_orden:"130",
         usuario:"yessi.gallo",
-        fecha:"25/03/2020 21:00",
+        fecha:"28/03/2020 21:00",
         total: 17700.0,
         estado:"Pendiente",
         items: [

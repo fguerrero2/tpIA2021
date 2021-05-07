@@ -89,7 +89,7 @@ function ProductoAgregar() {
             <CssBaseline />
             <Container   component="main" maxWidth="md"  >
                 <CssBaseline />
-                <Typography component="h1" variant="h5" className={classes.paper}>
+                <Typography component="h3"  className={classes.paper}>
                     Nuevo Producto
                  </Typography>
               
