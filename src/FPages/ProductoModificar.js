@@ -4,20 +4,24 @@ import AdminNavBar from '../components/AdminNarBar';
 import FooterBar from '../components/footerBar';
 import { Container } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
-import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import categorias from '../Data/categorias.js'; 
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
+import products from '../Data/fixtures.js';
+import { useParams } from 'react-router-dom';
 import { Link } from "react-router-dom"
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,14 +75,19 @@ const useStyles = makeStyles((theme) => ({
 
   
 
-function ProductoAgregar() {
+function ProductoModificar() {
     const classes = useStyles();
     const [categoria,setCategoria] = React.useState('');
+    const [name, setName] = React.useState('');
+    const {id} = useParams();
     
     const handleChangeCategoria = (event) => {
         setCategoria(event.target.value);
       };
-
+    const handleChangeName = (event) => {
+        setName(event.target.value);
+      };
+    
         
     return (
       <div >
@@ -86,18 +95,19 @@ function ProductoAgregar() {
           <AdminNavBar /> 
         </div>
         <div component="form">
+        { products.filter((filtro) => filtro.product_id == id).map(comprar =>(
           <Container component="main" maxWidth="md"  > 
             <CssBaseline />
             <Container   component="main" maxWidth="md"  >
                 <CssBaseline />
-                <Typography component="h3"  className={classes.paper}>
-                    Nuevo Producto
+                <Typography component="h1" variant="h5" className={classes.paper}>
+                    Modificar Producto
                  </Typography>
               
                 <Grid container spacing={2}>
                   <Grid item xs={10} >
                     <TextField
-                      autoComplete=""
+                      defaultValue={comprar.name}
                       name="name"
                       variant="outlined"
                       required
@@ -105,11 +115,13 @@ function ProductoAgregar() {
                       id="name"
                       label="Nombre"
                       autoFocus
+                      /*value={name}*/
+                      onChange={handleChangeName}
                     />
                   </Grid>
                   <Grid item xs={10}>
                     <TextField
-                      autoComplete=""
+                      defaultValue={comprar.descripcion}
                       name="descripcion"
                       variant="outlined"
                       required
@@ -120,7 +132,7 @@ function ProductoAgregar() {
                   </Grid>
                   <Grid item xs={10}>
                     <TextField
-                      autoComplete=""
+                      defaultValue={comprar.composicion}
                       name="composicion"
                       variant="outlined"
                       required
@@ -134,11 +146,11 @@ function ProductoAgregar() {
                       id="categoria"
                       name="categoria"
                       label="Categoria"
+                      defaultValue={comprar.categoria}
                       select
                       variant="outlined"
                       required
                       fullWidth
-                      value={categoria}
                       onChange={handleChangeCategoria}
                       helperText="Por favor seleccionar categoria"
                       >
@@ -151,7 +163,7 @@ function ProductoAgregar() {
                   </Grid>
                   <Grid item xs={5}>
                     <TextField
-                      autoComplete=""
+                      defaultValue={comprar.price}
                       id="price"
                       variant="outlined"
                       required
@@ -162,16 +174,11 @@ function ProductoAgregar() {
                     />
                   </Grid>
                   <Grid item xs={4}>
-                        <label htmlFor="contained-button-file">
-                            <Button variant="contained" color="primary" component="span">
-                            Subir imagen 
-                            </Button>
-                        </label>
-                        <input accept="image/*" className={classes.input} id="imagen-file" type="file" />
+                        <input label='subir imagen' accept="image/*" className={classes.input} id="imagen-file" type="file" />
                         <Card className={classes.card}>
                             <CardMedia
                                 className={classes.cardMedia}
-                                /*image= {Grid.Button.image}*//* {x.img}*/
+                                image= {comprar.img}
                             />
                         </Card>
                    </Grid>
@@ -194,12 +201,13 @@ function ProductoAgregar() {
                             variant="contained"
                             color="primary"
                         >
-                            Confirmar producto
+                            Modificar producto
                         </Button>  
                     </Grid>
           </Container>
   
     </Container>
+		))}
     </div> 
        <div  > 
           <FooterBar />
@@ -208,5 +216,5 @@ function ProductoAgregar() {
     );
   }
   
-  export default ProductoAgregar;
+  export default ProductoModificar;
   

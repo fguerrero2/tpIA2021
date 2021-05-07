@@ -11,6 +11,7 @@ import AdminOrden from './FPages/AdminOrden';
 import AdminProductos from './FPages/AdminProductos';
 import ProductoAgregar from './FPages/ProductoAgregar';
 import ProductoDetalles from './FPages/ProductoDetalles';
+import ProductoModificar from './FPages/ProductoModificar';
 
 
 class App extends Component {
@@ -29,6 +30,7 @@ class App extends Component {
                <Route path="/Admin_Productos" exact component={AdminProductos}/>
                <Route path="/productoagregar" exact component={ProductoAgregar}/>
                <Route path="/productodetalles/:id" render={(id)=> <ProductoDetalles {...id}/>}/>
+               <Route path="/productomodificar/:id" render={(id)=> <ProductoModificar {...id}/>}/>
            </Switch>          
         </BrowserRouter>
     );

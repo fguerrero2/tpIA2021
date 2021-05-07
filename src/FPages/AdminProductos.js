@@ -103,7 +103,7 @@ function AdminProductos() {
                 <TableCell>{x.stock}</TableCell>
                 <TableCell align="right">$ {ccyFormat (x.price)}</TableCell>
                 <TableCell >
-                  <IconButton aria-label="modify" className={classes.margin}>
+                  <IconButton aria-label="modify" className={classes.margin} link href={`/productomodificar/${x.product_id}`}>
                    <CreateIcon />
                   </IconButton>
                 </TableCell>
