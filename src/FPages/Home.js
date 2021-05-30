@@ -3,7 +3,6 @@ import { Container } from '@material-ui/core';
 import Portada from '../images/portada.jpg';
 import NavBar from '../components/NavBar';
 import FooterBar from '../components/footerBar';
-import Button from '../components/Button';
 
 
 function Home(props) {

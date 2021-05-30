@@ -4,18 +4,14 @@ import AdminNavBar from '../components/AdminNarBar';
 import FooterBar from '../components/footerBar';
 import { Container } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
-import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import categorias from '../Data/categorias.js'; 
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import { Link } from "react-router-dom"
 
@@ -129,7 +125,7 @@ function ProductoAgregar() {
                       label="Composicion"
                     />
                   </Grid>
-                  <Grid item xs={5}>
+                  <Grid item xs={4}>
                     <TextField
                       id="categoria"
                       name="categoria"
@@ -149,7 +145,7 @@ function ProductoAgregar() {
                         ))}
                     </TextField>
                   </Grid>
-                  <Grid item xs={5}>
+                  <Grid item xs={3}>
                     <TextField
                       autoComplete=""
                       id="price"
@@ -158,6 +154,18 @@ function ProductoAgregar() {
                       fullWidth
                       name="price"
                       label="Precio"
+                      type="amount"
+                    />
+                  </Grid>
+                  <Grid item xs={3}>
+                    <TextField
+                      autoComplete=""
+                      id="stock"
+                      variant="outlined"
+                      required
+                      fullWidth
+                      name="stock"
+                      label="Stock"
                       type="amount"
                     />
                   </Grid>
