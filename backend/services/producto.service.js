@@ -67,7 +67,7 @@ exports.updateProducto = async function (producto) {
 
     try {
         //Find the old Producto Object by the Id
-        var oldSucursal = await Producto.findOne(id);
+        var oldProducto = await Producto.findOne(id);
     } catch (e) {
         throw Error("Error occured while Finding the Producto")
     }
