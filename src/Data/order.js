@@ -1,5 +1,9 @@
 const order = {
     total: 11198.0,
+    usuario:"yessi.gallo",
+    modo_entrega: "",
+    direccion_entrega: "",
+    lugar_retiro: "",
     items: [
         {
             item_id: 1,

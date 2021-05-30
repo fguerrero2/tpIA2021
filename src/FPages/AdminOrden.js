@@ -19,6 +19,7 @@ import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import orderlist from '../Data/orderlist.js'; 
+import modosEntrega from '../Data/modosEntrega.js'; 
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -81,10 +82,15 @@ function Row(props) {
         <TableCell align="left">{row.usuario}</TableCell>
         <TableCell align="left">{row.fecha}</TableCell>
         <TableCell align="right">$ {ccyFormat (row.total)}</TableCell>
+        { modosEntrega.filter((filtro) => filtro.value == row.modo_entrega).map(modo =>(
+          <TableCell align="right">{modo.label}</TableCell>
+        ))}
+        <TableCell align="right">{row.direccion_entrega}</TableCell>
+        <TableCell align="right">{row.fecha_entrega}</TableCell>
         <TableCell align="right">{row.estado}</TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
               <Typography variant="h6" gutterBottom component="div">
@@ -139,6 +145,10 @@ Row.propTypes = {
     usuario: PropTypes.string.isRequired,
     fecha: PropTypes.string.isRequired,
     total: PropTypes.number.isRequired,
+    modo_entrega: PropTypes.string.isRequired,
+    lugar_retiro: PropTypes.string.isRequired,
+    direccion_entrega: PropTypes.string.isRequired,
+    fecha_entrega: PropTypes.string.isRequired,
     estado: PropTypes.string.isRequired,
     items: PropTypes.arrayOf(
       PropTypes.shape({
@@ -166,29 +176,32 @@ function AdminOrden() {
       <AdminNavBar /> 
       <main >
         {/* Grilla  */}
-        <Container className={classes.cardGrid} maxWidth="md">
+        <Container className={classes.cardGrid} maxWidth="lg">
         <Typography gutterBottom variant="h5"  className={classes.title} >
           Lista de ordenes 
         </Typography>
-        <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell>Numero Orden</TableCell>
-              <TableCell align="left">Usuario </TableCell>
-              <TableCell align="left">Fecha</TableCell>
-              <TableCell align="right">Total</TableCell>
-              <TableCell align="right">Estado </TableCell>
-           </TableRow>
-          </TableHead>
-          <TableBody>
-          {orderlist.map((row) => (
-              <Row key={row.nro_orden} row={row} />
-          ))}
-          </TableBody>
-        </Table>
-        </TableContainer>
+              <TableContainer component={Paper}>
+                <Table aria-label="collapsible table">
+                  <TableHead>
+                    <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell>Numero Orden</TableCell>
+                        <TableCell align="left">suario </TableCell>
+                        <TableCell align="left">Fecha</TableCell>
+                        <TableCell align="right">Total</TableCell>
+                        <TableCell align="right">Modo de entrega </TableCell>
+                        <TableCell align="right">Direccion de entrega</TableCell>
+                        <TableCell align="right">Fecha de entrega </TableCell>
+                        <TableCell align="right">Estado </TableCell>
+                  </TableRow>
+                  </TableHead>
+                  <TableBody>
+                  {orderlist.map((row) => (
+                      <Row key={row.nro_orden} row={row} />
+                  ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
       </Container>
       
 

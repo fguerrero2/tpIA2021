@@ -10,18 +10,12 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
-import categorias from '../Data/categorias.js'; 
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import products from '../Data/fixtures.js';
 import { useParams } from 'react-router-dom';
 import { Link } from "react-router-dom"
-import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
+import products from '../Data/fixtures.js';
+import categorias from '../Data/categorias.js'; 
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -95,7 +89,7 @@ function ProductoModificar() {
           <AdminNavBar /> 
         </div>
         <div component="form">
-        { products.filter((filtro) => filtro.product_id == id).map(comprar =>(
+        { products.filter((filtro) => filtro.product_id == id).map(modificar =>(
           <Container component="main" maxWidth="md"  > 
             <CssBaseline />
             <Container   component="main" maxWidth="md"  >
@@ -107,7 +101,7 @@ function ProductoModificar() {
                 <Grid container spacing={2}>
                   <Grid item xs={10} >
                     <TextField
-                      defaultValue={comprar.name}
+                      defaultValue={modificar.name}
                       name="name"
                       variant="outlined"
                       required
@@ -121,7 +115,7 @@ function ProductoModificar() {
                   </Grid>
                   <Grid item xs={10}>
                     <TextField
-                      defaultValue={comprar.descripcion}
+                      defaultValue={modificar.descripcion}
                       name="descripcion"
                       variant="outlined"
                       required
@@ -132,7 +126,7 @@ function ProductoModificar() {
                   </Grid>
                   <Grid item xs={10}>
                     <TextField
-                      defaultValue={comprar.composicion}
+                      defaultValue={modificar.composicion}
                       name="composicion"
                       variant="outlined"
                       required
@@ -141,12 +135,12 @@ function ProductoModificar() {
                       label="Composicion"
                     />
                   </Grid>
-                  <Grid item xs={5}>
+                  <Grid item xs={4}>
                     <TextField
                       id="categoria"
                       name="categoria"
                       label="Categoria"
-                      defaultValue={comprar.categoria}
+                      defaultValue={modificar.categoria}
                       select
                       variant="outlined"
                       required
@@ -161,9 +155,9 @@ function ProductoModificar() {
                         ))}
                     </TextField>
                   </Grid>
-                  <Grid item xs={5}>
+                  <Grid item xs={3}>
                     <TextField
-                      defaultValue={comprar.price}
+                      defaultValue={modificar.price}
                       id="price"
                       variant="outlined"
                       required
@@ -173,12 +167,24 @@ function ProductoModificar() {
                       type="amount"
                     />
                   </Grid>
+                  <Grid item xs={3}>
+                    <TextField
+                      defaultValue={modificar.stock}
+                      id="stock"
+                      variant="outlined"
+                      required
+                      fullWidth
+                      name="stock"
+                      label="Stock"
+                      type="amount"
+                    />
+                  </Grid>
                   <Grid item xs={4}>
                         <input label='subir imagen' accept="image/*" className={classes.input} id="imagen-file" type="file" />
                         <Card className={classes.card}>
                             <CardMedia
                                 className={classes.cardMedia}
-                                image= {comprar.img}
+                                image= {modificar.img}
                             />
                         </Card>
                    </Grid>
