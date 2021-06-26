@@ -16,6 +16,7 @@ var apiRouterProducto = require('./routes/producto');
 var apiRouterSucursal = require('./routes/sucursal'); 
 //var apiRouterCategoria = require('./routes/categoria'); 
 var apiRouterEntregamodo = require('./routes/entregamodo'); 
+var apiRouterOrden = require('./routes/orden'); 
 
 //instancio el servidor
 var app = express();
@@ -42,6 +43,7 @@ app.use('/api',apiRouterProducto);
 app.use('/api',apiRouterSucursal);
 //app.use('/api',apiRouterCategoria);
 app.use('/api',apiRouterEntregamodo);
+app.use('/api',apiRouterOrden);
 app.use('/', indexRouter);
 
 //onsole.log("processENV",process.env);
