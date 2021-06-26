@@ -14,8 +14,9 @@ import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import { useParams } from 'react-router-dom';
 import { Link } from "react-router-dom"
-import products from '../Data/fixtures.js';
 import categorias from '../Data/categorias.js'; 
+import { useHistory } from "react-router-dom";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,20 +68,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-  
-
 function ProductoModificar() {
     const classes = useStyles();
-    const [categoria,setCategoria] = React.useState('');
-    const [name, setName] = React.useState('');
     const {id} = useParams();
-    
-    const handleChangeCategoria = (event) => {
-        setCategoria(event.target.value);
-      };
-    const handleChangeName = (event) => {
-        setName(event.target.value);
-      };
+    const [product, setProduct]= React.useState({});
+    const history = useHistory();
+
+    const handleChange = (event) => {
+      let name = event.target.name
+      setProduct({...product, [name]: event.target.value});
+    }
+
+    const updateProduct = () => {
+      fetch(`http://localhost:4000/api/products/${id}`, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(product),
+      })
+      .then(res => res.json())
+      .then((x) => {
+        history.push("/Admin_Productos");
+      })
+    }
+
+    React.useEffect(() => {
+      fetch(`http://localhost:4000/api/products/${id}`, {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json'},
+      })
+      .then(res => res.json())
+      .then(res => setProduct(res))
+    }, [id])
     
         
     return (
@@ -89,8 +107,7 @@ function ProductoModificar() {
           <AdminNavBar /> 
         </div>
         <div component="form">
-        { products.filter((filtro) => filtro.product_id == id).map(modificar =>(
-          <Container component="main" maxWidth="md"  > 
+        <Container component="main" maxWidth="md"  > 
             <CssBaseline />
             <Container   component="main" maxWidth="md"  >
                 <CssBaseline />
@@ -101,55 +118,41 @@ function ProductoModificar() {
                 <Grid container spacing={2}>
                   <Grid item xs={10} >
                     <TextField
-                      defaultValue={modificar.name}
-                      name="name"
+                      value={product.name || ""}
                       variant="outlined"
                       required
                       fullWidth
-                      id="name"
+                      name="name"
                       label="Nombre"
                       autoFocus
-                      /*value={name}*/
-                      onChange={handleChangeName}
+                      onChange={handleChange}
                     />
                   </Grid>
                   <Grid item xs={10}>
                     <TextField
-                      defaultValue={modificar.descripcion}
-                      name="descripcion"
+                      value={product.description || ""}
+                      name="description"
                       variant="outlined"
                       required
                       fullWidth
-                      id="descripcion"
-                      label="Descripcion"
-                    />
-                  </Grid>
-                  <Grid item xs={10}>
-                    <TextField
-                      defaultValue={modificar.composicion}
-                      name="composicion"
-                      variant="outlined"
-                      required
-                      fullWidth
-                      id="composicion"
-                      label="Composicion"
+                      label="Description"
+                      onChange={handleChange}
                     />
                   </Grid>
                   <Grid item xs={4}>
                     <TextField
-                      id="categoria"
-                      name="categoria"
+                      name="category"
                       label="Categoria"
-                      defaultValue={modificar.categoria}
-                      select
+                      value={product.category || ""} 
                       variant="outlined"
+                      onChange={handleChange}
+                      select
                       required
                       fullWidth
-                      onChange={handleChangeCategoria}
                       helperText="Por favor seleccionar categoria"
                       >
                         {categorias.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
+                            <MenuItem key={option.value} value={option.value} selected={option.value === product.category ? 1: 0}>
                             {option.label}
                             </MenuItem>
                         ))}
@@ -157,64 +160,60 @@ function ProductoModificar() {
                   </Grid>
                   <Grid item xs={3}>
                     <TextField
-                      defaultValue={modificar.price}
-                      id="price"
+                      value={product.price || 0}
                       variant="outlined"
                       required
                       fullWidth
                       name="price"
                       label="Precio"
                       type="amount"
+                      onChange={handleChange}
                     />
                   </Grid>
                   <Grid item xs={3}>
                     <TextField
-                      defaultValue={modificar.stock}
-                      id="stock"
+                      value={product.stock || 0}
                       variant="outlined"
                       required
                       fullWidth
                       name="stock"
                       label="Stock"
                       type="amount"
+                      onChange={handleChange}
                     />
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid spacing={4}  item xs={4}>
                         <input label='subir imagen' accept="image/*" className={classes.input} id="imagen-file" type="file" />
                         <Card className={classes.card}>
                             <CardMedia
                                 className={classes.cardMedia}
-                                image= {modificar.img}
+                                image= {product.img}
                             />
                         </Card>
                    </Grid>
                 </Grid>
-                <Grid item xs={5}>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="secondary"
-                            component={Link} to="/Admin_Productos"
-                        >
-                            Regresar
-                        </Button>  
+                <Grid  container spacing={2}  >
+                    <Grid m xs={4}>  </Grid>
+                    <Grid item xs={3}>
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                component={Link} to="/Admin_Productos"
+                            >
+                                Regresar
+                            </Button>  
+                        </Grid>
+                    <Grid item xs={3}  >
+                      <Button  type="submit"  fullWidth  variant="contained" color="primary" onClick={updateProduct}>
+                          Modificar
+                      </Button>  
                     </Grid>
-                <Grid item xs={5}>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                        >
-                            Modificar producto
-                        </Button>  
-                    </Grid>
+                 </Grid>
           </Container>
   
     </Container>
-		))}
-    </div> 
+		</div> 
        <div  > 
           <FooterBar />
        </div>

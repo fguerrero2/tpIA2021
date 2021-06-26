@@ -82,7 +82,7 @@ function Row(props) {
         <TableCell align="left">{row.usuario}</TableCell>
         <TableCell align="left">{row.fecha}</TableCell>
         <TableCell align="right">$ {ccyFormat (row.total)}</TableCell>
-        { modosEntrega.filter((filtro) => filtro.value == row.modo_entrega).map(modo =>(
+        { modosEntrega.filter((filtro) => filtro.value === row.modo_entrega).map(modo =>(
           <TableCell align="right">{modo.label}</TableCell>
         ))}
         <TableCell align="right">{row.direccion_entrega}</TableCell>

@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
-import categorias from '../Data/categorias.js'; 
+import category from '../Data/categorias.js'; 
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import { Link } from "react-router-dom"
@@ -34,20 +34,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'left',/*center */
   },
-  icon: {
-    marginRight: theme.spacing(2),
-  },
-  heroContent: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(8, 0, 6),
-  },
-  heroButtons: {
-    marginTop: theme.spacing(4),
-  },
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-  },
   card: {
     height: '100%',
     display: 'flex',
@@ -56,24 +42,16 @@ const useStyles = makeStyles((theme) => ({
   cardMedia: {
     paddingTop: '100%', // 16:9
    },
-  cardContent: {
-    flexGrow: 1,
-  },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(3),
-  },
 }));
-
-  
 
 function ProductoAgregar() {
     const classes = useStyles();
-    const [categoria,setCategoria] = React.useState('');
+    const [product,setProduct] = React.useState('');
     
-    const handleChangeCategoria = (event) => {
-        setCategoria(event.target.value);
-      };
+    const handleChange = (event) => {
+      let name = event.target.name
+      setProduct({...product, [name]: event.target.value});
+    }
 
         
     return (
@@ -82,16 +60,17 @@ function ProductoAgregar() {
           <AdminNavBar /> 
         </div>
         <div component="form">
-          <Container component="main" maxWidth="md"  > 
+          <Container   component="main" >
             <CssBaseline />
-            <Container   component="main" maxWidth="md"  >
+            <Grid container spacing={3}> 
+              <Grid item xs={12} sm={6}>
+                <Container >
                 <CssBaseline />
                 <Typography component="h3"  className={classes.paper}>
                     Nuevo Producto
-                 </Typography>
-              
+                </Typography>
                 <Grid container spacing={2}>
-                  <Grid item xs={10} >
+                  <Grid item xs={12} >
                     <TextField
                       autoComplete=""
                       name="name"
@@ -103,19 +82,19 @@ function ProductoAgregar() {
                       autoFocus
                     />
                   </Grid>
-                  <Grid item xs={10}>
+                  <Grid item xs={12}>
                     <TextField
                       autoComplete=""
-                      name="descripcion"
+                      name="description"
                       variant="outlined"
                       required
                       fullWidth
-                      id="descripcion"
+                      id="description"
                       label="Descripcion"
                     />
                   </Grid>
-                  <Grid item xs={10}>
-                    <TextField
+                  <Grid item xs={12}>
+                    <TextField 
                       autoComplete=""
                       name="composicion"
                       variant="outlined"
@@ -134,15 +113,14 @@ function ProductoAgregar() {
                       variant="outlined"
                       required
                       fullWidth
-                      value={categoria}
-                      onChange={handleChangeCategoria}
-                      helperText="Por favor seleccionar categoria"
-                      >
-                        {categorias.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                            </MenuItem>
-                        ))}
+                      value={category}
+                      onChange={handleChange}
+                   >
+                    {category.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                        </MenuItem>
+                    ))}
                     </TextField>
                   </Grid>
                   <Grid item xs={3}>
@@ -169,45 +147,46 @@ function ProductoAgregar() {
                       type="amount"
                     />
                   </Grid>
-                  <Grid item xs={4}>
-                        <label htmlFor="contained-button-file">
-                            <Button variant="contained" color="primary" component="span">
-                            Subir imagen 
-                            </Button>
-                        </label>
-                        <input accept="image/*" className={classes.input} id="imagen-file" type="file" />
-                        <Card className={classes.card}>
-                            <CardMedia
-                                className={classes.cardMedia}
-                                /*image= {Grid.Button.image}*//* {x.img}*/
-                            />
-                        </Card>
-                   </Grid>
                 </Grid>
-                <Grid item xs={5}>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="secondary"
-                            component={Link} to="/Admin_Productos"
-                        >
-                            Regresar
-                        </Button>  
-                    </Grid>
-                <Grid item xs={5}>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                        >
-                            Confirmar producto
-                        </Button>  
-                    </Grid>
+              </Container>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Container   >
+                <CssBaseline />
+                <Grid item xs={12} >
+                  <Grid  container spacing={2}  >
+                    <Grid m xs={6}>  </Grid>
+                      <Grid item xs={5}>
+                          <label htmlFor="contained-button-file">
+                          <Button variant="contained" color="primary" component="span">
+                            Subir imagen 
+                          </Button>
+                        </label>
+                      </Grid> </Grid>
+                    <input accept="image/*" className={classes.input} id="imagen-file" type="file" />
+                    <Card className={classes.card}>
+                    <CardMedia className={classes.cardMedia} />
+                  </Card>
+                
+                </Grid>
+              </Container>
+            </Grid>
+            </Grid>
+            <Grid  container spacing={2}  >
+              <Grid m xs={6}>  </Grid>
+              <Grid item xs={3}>
+                <Button type="submit" fullWidth variant="contained" component={Link} to="/Admin_Productos" >
+                    Regresar
+                </Button>  
+              </Grid>
+              <Grid item xs={3}>
+                <Button  type="submit" fullWidth  variant="contained" color="primary" >
+                  Nuevo producto
+                </Button>  
+                </Grid>
+              </Grid>
           </Container>
-  
-    </Container>
+
     </div> 
        <div  > 
           <FooterBar />
@@ -217,4 +196,6 @@ function ProductoAgregar() {
   }
   
   export default ProductoAgregar;
+  
+
   

@@ -13,7 +13,6 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CreateIcon from '@material-ui/icons/Create';
-import products from '../Data/fixtures.js'; 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 
@@ -24,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
   heroContent: {
     backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(8, 0, 6),
+    padding: theme.spacing(7, 0, 6),
   },
   heroButtons: {
     marginTop: theme.spacing(4),
@@ -59,12 +58,34 @@ function ccyFormat(num) {
   return `${num.toFixed(2)}`;
 }
 
+function deleteProduct(id, items, setItems) {
+  fetch(`http://localhost:4000/api/products/${id}`, {method: 'DELETE'})
+  let newItems = items.filter((x) => x._id !== id);
+  setItems(newItems)
+}
 
 function AdminProductos() {
   const classes = useStyles();
+   
+  const [items, setItems]= React.useState([]);
+ // const [showModal, setShowModal] = React.useState(false)
+
+  React.useEffect(() => {
+    fetch("http://localhost:4000/api/products/", {
+      method: 'GET',
+      headers: {'Content-Type': 'application/json'},
+      // body: {},
+    })
+    .then(res => res.json())
+    .then(res => { 
+      console.log(res)
+      setItems(res)
+    })
+  }, [])
 
   return (
     <React.Fragment>
+      
       <AdminNavBar/> 
       <main >
         {/* Grilla  */}
@@ -91,24 +112,24 @@ function AdminProductos() {
            </TableRow>
           </TableHead>
           <TableBody>
-           {products.map((x) => (
-              <TableRow key={x.producto_id}>
+           {items.map((x) => (
+              <TableRow key={x._id}>
                 <TableCell>
                 <Avatar variant="square" src={x.img} />
                 
                 </TableCell>
-                <TableCell>{x.product_id}</TableCell>
+                <TableCell>{x._id}</TableCell>
                 <TableCell>{x.name}</TableCell>
-                <TableCell>{x.categoria}</TableCell>
+                <TableCell>{x.category}</TableCell>
                 <TableCell>{x.stock}</TableCell>
-                <TableCell align="right">$ {ccyFormat (x.price)}</TableCell>
+                <TableCell align="right">$ {ccyFormat (x.price)}</TableCell>          
                 <TableCell >
-                  <IconButton aria-label="modify" className={classes.margin} link href={`/productomodificar/${x.product_id}`}>
+                  <IconButton aria-label="modify" className={classes.margin} link href={`/productomodificar/${x._id}`}>
                    <CreateIcon />
                   </IconButton>
                 </TableCell>
                 <TableCell >
-                  <IconButton aria-label="delete" className={classes.margin}>
+                  <IconButton aria-label="delete" className={classes.margin} onClick={() => deleteProduct(x._id, items, setItems)} >
                    <DeleteIcon />
                   </IconButton>
                 </TableCell>

@@ -12,10 +12,6 @@ const categorias = [
     label: "Buzo",
   },
   {
-    value:"Buzo",
-    label:"Buzo",
-  },
-  {
     value:"Campera",
     label:"Campera",
   },

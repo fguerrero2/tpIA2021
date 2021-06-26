@@ -10,7 +10,6 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import products from '../Data/fixtures.js';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -51,15 +50,24 @@ function ccyFormat(num) {
 
 function Shop() {
   const classes = useStyles();
-  let items = products;
-  
+  const [items, setItems]= React.useState([]);
+
+  React.useEffect(() => {
+    fetch("http://localhost:4000/api/products/", {
+      method: 'GET',
+      headers: {'Content-Type': 'application/json'},
+      // body: {},
+    })
+    .then(res => res.json())
+    .then(res => setItems(res))
+  }, [])
+
   return (
     <React.Fragment>
       <NavBar /> 
       <main>
         {/* Productos  */}
         <Container className={classes.cardGrid} maxWidth="md">
-          {/* End hero unit */}
           <Grid container spacing={4}>
             {items.map((x) => (
               
@@ -79,7 +87,7 @@ function Shop() {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small" color="primary" link href={`/productodetalles/${x.product_id}`}>
+                    <Button size="small" color="primary" link href={`/productodetalles/${x._id}`}>
                        Comprar
                     </Button>
                   </CardActions>

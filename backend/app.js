@@ -9,16 +9,20 @@ var fs = require('fs');
 //incorporo cors
 var cors = require('cors');
 
-//importo rutas
+//import routes
 var indexRouter = require('./routes/index');
 var apiRouterUser = require('./routes/user'); 
-var apiRouterProducto = require('./routes/producto'); 
+var apiRouterProducts = require('./routes/products'); 
 var apiRouterSucursal = require('./routes/sucursal'); 
 //var apiRouterCategoria = require('./routes/categoria'); 
 var apiRouterEntregamodo = require('./routes/entregamodo'); 
 
 //instancio el servidor
 var app = express();
+
+// use cors
+app.options('*', cors())
+app.use(cors());
 
 // seteo vistas 
 app.set('views', path.join(__dirname, 'views'));
@@ -31,20 +35,18 @@ app.use(express.urlencoded({
   extended: false
 }));
 
-//aplico cors
-app.use(cors());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Indico las rutas de los endpoint
 app.use('/api', apiRouterUser);
-app.use('/api',apiRouterProducto);
-app.use('/api',apiRouterSucursal);
-//app.use('/api',apiRouterCategoria);
-app.use('/api',apiRouterEntregamodo);
+app.use('/api', apiRouterProducts);
+app.use('/api', apiRouterSucursal);
+// app.use('/api', apiRouterCategoria);
+// app.use('/api', apiRouterEntregamodo);
 app.use('/', indexRouter);
 
-//onsole.log("processENV",process.env);
+//console.log("processENV",process.env);
 if (process.env.NODE_ENV === 'Development') {
   require('./config').config();
 }
@@ -69,16 +71,10 @@ mongoose.connect(url,opts)
     console.log(`Error Connecting to the Mongodb Database...`),
     console.log(e)
   })
+
 // catch 404 and forward to error handler 
 app.use(function (req, res, next) {
   next(createError(404));
-});
-
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:4000");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  next();
 });
 
 // error handler
