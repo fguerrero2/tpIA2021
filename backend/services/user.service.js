@@ -4,101 +4,45 @@ var jwt = require('jsonwebtoken');
 
 _this = this
 
-exports.getUsers = async function (query, page, limit) {
-    var options = {page, limit}
-    try {
-        return await User.paginate(query, options)
-    } catch (e) {
-        console.log("error services",e)
-        throw Error('Error while Paginating Users');
-    }
+function randomToken() {
+    return (
+        Math.random().toString(36).substring(2, 15) +
+        Math.random().toString(36).substring(2, 15) +
+        Math.random().toString(36).substring(2, 15) +
+        Math.random().toString(36).substring(2, 15)
+    )
 }
 
-exports.createUser = async function (user) {
-    var hashedPassword = bcrypt.hashSync(user.password, 8);
-    
-    var newUser = new User({
-        name: user.name,
-        email: user.email,
-        date: new Date(),
+exports.createUser = async function (data) {
+    var hashedPassword = bcrypt.hashSync(data.password, 8);
+    var user = await User.findOne({email: data.email});
+    if (user) {
+        throw Error("User already exists")
+    }
+    user = new User({
+        ...data,
         password: hashedPassword,
-        isStaff: user.isStaff || false,
+        token: randomToken(),
     })
-
-    try {
-        var savedUser = await newUser.save();
-        var token = jwt.sign({
-            id: savedUser._id
-        }, process.env.SECRET, {
-            expiresIn: 86400 // expires in 24 hours
-        });
-        return token;
-    } catch (e) {
-        console.log(e)    
-        throw Error("Error while Creating User")
-    }
+    return await user.save();
 }
 
-exports.updateUser = async function ({name}) {
-    try {
-        var oldUser = await User.findOne({name: name});
-    } catch (e) {
-        throw Error("Error occured while Finding the User")
-    }
-    if (!oldUser) {
-        return false;
-    }
-    //Edit the User Object
-    var hashedPassword = bcrypt.hashSync(user.password, 8);
-    oldUser.name = user.name
-    oldUser.email = user.email
-    oldUser.password = hashedPassword
-    try {
-        var savedUser = await oldUser.save()
-        return savedUser;
-    } catch (e) {
-        throw Error("And Error occured while updating the User");
-    }
+exports.loginUser = async function (email, password) {
+    var user = await User.findOne({email: email});
+    if (!user) throw Error("Invalid username/password")
+    var ok = bcrypt.compareSync(password, user.password);
+    if (!ok) throw Error("Invalid username/password")
+    user.token = randomToken()
+    await user.save()
+    return user
 }
 
-exports.deleteUser = async function (id) {
-
-    // Delete the User
-    try {
-        var deleted = await User.remove({
-            _id: id
-        })
-        if (deleted.n === 0 && deleted.ok === 1) {
-            throw Error("User Could not be deleted")
-        }
-        return deleted;
-    } catch (e) {
-        throw Error("Error Occured while Deleting the User")
-    }
+exports.authUser = async function (token) {
+    return await User.findOne({token: token});
 }
 
-
-exports.loginUser = async function (user) {
-
-    // Creating a new Mongoose Object by using the new keyword
-    try {
-        // Find the User 
-        console.log("login:",user)
-        var _details = await User.findOne({
-            email: user.email
-        });
-        var passwordIsValid = bcrypt.compareSync(user.password, _details.password);
-        if (!passwordIsValid) throw Error("Invalid username/password")
-
-        var token = jwt.sign({
-            id: _details._id
-        }, process.env.SECRET, {
-            expiresIn: 86400 // expires in 24 hours
-        });
-        return {token:token, user:_details};
-    } catch (e) {
-        // return a Error message describing the reason     
-        throw Error("Error while Login User")
-    }
-
+exports.logoutUser = async function (user) {
+    user.token = null;
+    await user.save();
+    return user;
 }

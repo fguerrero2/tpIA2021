@@ -8,7 +8,8 @@ import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import NavBar from '../components/NavBar';
 import FooterBar from '../components/footerBar';
-
+import { useHistory } from "react-router-dom";
+import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -18,15 +19,44 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '100%',
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
 }));
 
-function Login() {
+export default function Login() {
   const classes = useStyles();
+  const [user, setUser]= React.useState({});
+  const [error, setError]= React.useState(false);
+  const history = useHistory(); 
+  
+  const handleChange = (event) => {
+    let name = event.target.name
+    setUser({...user, [name]: event.target.value});
+  }
+
+  const handleSubmit = async () => {
+    let res = await fetch(`http://localhost:4000/api/users/login/`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(user),
+    })
+    if (!res.ok) {
+      setError(true)
+    } else {
+      let data = await res.json()
+      localStorage.setItem("token", data.token)
+      localStorage.setItem("is_staff", data.is_staff)
+      localStorage.setItem("name", data.first_name)
+      if (data.is_staff) {
+        history.push("/Admin_OrdenesCompra")
+      } else {
+        history.push("/shop")
+      }  
+    }
+  }
 
   return (
     <div>
@@ -34,11 +64,11 @@ function Login() {
       <NavBar /> 
       </div>
       <div >
-         <Container  component="main" maxWidth="xs" >
+        <Container  component="main" maxWidth="xs" >
           <CssBaseline />
-           <div className={classes.paper}>
-         Acceder
-         <form className={classes.form} noValidate>
+          <div className={classes.paper}>
+        Acceder
+        <form className={classes.form} noValidate>
           <TextField
             variant="outlined"
             margin="normal"
@@ -49,6 +79,7 @@ function Login() {
             name="email"
             autoComplete="email"
             autoFocus
+            onChange={handleChange}
           />
           <TextField
             variant="outlined"
@@ -56,18 +87,16 @@ function Login() {
             required
             fullWidth
             name="password"
-            label="Contraseña"
+            label="Password"
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={handleChange}
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
+          {error && <p>Email o Password inválidos.</p>}
+          <Button fullWidth variant="contained"
+            color="primary" className={classes.submit}
+            onClick={handleSubmit} >
             Ingresar
           </Button>
           <Grid container>
@@ -85,11 +114,9 @@ function Login() {
       </Box>
     </Container>
     </div> 
-     <div className="App-NavBar"> 
+    <div className="App-NavBar"> 
         <FooterBar />
-     </div>
+    </div>
     </div>
   );
 }
-
-export default Login;

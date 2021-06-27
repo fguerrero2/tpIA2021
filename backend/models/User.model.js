@@ -7,8 +7,8 @@ var UserSchema = new mongoose.Schema({
     first_name: String,
     last_name: String,
     password: String,
-    created_at: Date,
-    isStaff: Boolean,
+    token: String,
+    is_staff: Boolean,
 })
 
 UserSchema.plugin(mongoosePaginate)

@@ -12,6 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -31,6 +32,53 @@ const useStyles = makeStyles((theme) => ({
 
 function Registrarse() {
   const classes = useStyles();
+  const [data, setData]= React.useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+    tyc: false,
+    error: "",
+  });
+  const history = useHistory();
+
+  const handleChange = (event) => {
+    let name = event.target.name
+    setData({...data, [name]: event.target.value});
+  }
+
+  const handleCheck = (event) => {
+    let name = event.target.name
+    setData({...data, [name]: !data[name]});
+  }
+
+  const handleSubmit = async () => {
+    if (!data.tyc) {
+      setData({...data, error: "por favor, acepta los terminos y condiciones"})
+    } else {
+      let res = await fetch(`http://localhost:4000/api/users/registration/`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          first_name: data.first_name,
+          last_name: data.last_name,
+          email: data.email,
+          password: data.password,
+        }),
+      })
+      if (!res.ok) {
+        let error = await res.json()
+        setData({...data, error: "uno o mas datos es invalido"})
+      } else {
+        let user = await res.json()
+        localStorage.setItem("token", user.token)
+        localStorage.setItem("is_staff", user.is_staff)
+        localStorage.setItem("name", user.first_name)
+        history.push("/")
+      }
+    }
+  }
+
   return (
     <div >
       <div className="App-NavBar"> 
@@ -48,14 +96,13 @@ function Registrarse() {
               <Grid container spacing={2}>
                 <Grid item xs={12} >
                   <TextField
-                    autoComplete="fname"
-                    name="firstName"
+                    name="first_name"
                     variant="outlined"
                     required
                     fullWidth
-                    id="firstName"
                     label="Nombre"
                     autoFocus
+                    onChange={handleChange}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -63,10 +110,9 @@ function Registrarse() {
                     variant="outlined"
                     required
                     fullWidth
-                    id="lastName"
                     label="Apellido"
-                    name="lastName"
-                    autoComplete="lname"
+                    name="last_name"
+                    onChange={handleChange}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -74,10 +120,10 @@ function Registrarse() {
                     variant="outlined"
                     required
                     fullWidth
-                    id="email"
                     label="Email Address"
                     name="email"
                     autoComplete="email"
+                    onChange={handleChange}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -88,23 +134,19 @@ function Registrarse() {
                     name="password"
                     label="Password"
                     type="password"
-                    id="password"
                     autoComplete="current-password"
+                    onChange={handleChange}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <FormControlLabel
-                    control={<Checkbox value="allowExtraEmails" color="primary" />}
+                    control={<Checkbox value={data} name="tyc" color="primary" onChange={handleCheck} />}
                     label="Acepto Terminos y Condiciones"
                   />
                 </Grid>
               </Grid>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-               >
+              { data.error && <p>{data.error}</p> }
+              <Button type="submit"  fullWidth variant="contained" color="primary" onClick={handleSubmit}               >
                 Registrarse
               </Button>  
         </Container>
@@ -119,18 +161,3 @@ function Registrarse() {
 }
 
 export default Registrarse;
-
-
-/*
-
-function Copyright() {
-
-}
-
-
-
-export default function SignUp() {
-  
-  );
-}
-*/

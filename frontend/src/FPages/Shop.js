@@ -53,13 +53,16 @@ function Shop() {
   const [items, setItems]= React.useState([]);
 
   React.useEffect(() => {
-    fetch("http://localhost:4000/api/products/", {
-      method: 'GET',
-      headers: {'Content-Type': 'application/json'},
-      // body: {},
-    })
-    .then(res => res.json())
-    .then(res => setItems(res))
+    const fetchData = async () => {
+      let res = await fetch("http://localhost:4000/api/products/", {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json'},
+        // body: {},
+      })
+      res = await res.json()
+      setItems(res)    
+    }
+    fetchData()
   }, [])
 
   return (

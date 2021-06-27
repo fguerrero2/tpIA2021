@@ -10,12 +10,10 @@ var fs = require('fs');
 var cors = require('cors');
 
 //import routes
-var indexRouter = require('./routes/index');
+//var indexRouter = require('./routes/index');
 var apiRouterUser = require('./routes/user'); 
 var apiRouterProducts = require('./routes/products'); 
-var apiRouterSucursal = require('./routes/sucursal'); 
-//var apiRouterCategoria = require('./routes/categoria'); 
-var apiRouterEntregamodo = require('./routes/entregamodo'); 
+//var apiRouterOrden = require('./routes/orden'); 
 
 //instancio el servidor
 var app = express();
@@ -41,10 +39,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Indico las rutas de los endpoint
 app.use('/api', apiRouterUser);
 app.use('/api', apiRouterProducts);
-app.use('/api', apiRouterSucursal);
-// app.use('/api', apiRouterCategoria);
-// app.use('/api', apiRouterEntregamodo);
-app.use('/', indexRouter);
+// app.use('/api',apiRouterOrden);
+// app.use('/', indexRouter);
 
 //console.log("processENV",process.env);
 if (process.env.NODE_ENV === 'Development') {
