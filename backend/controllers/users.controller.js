@@ -68,14 +68,15 @@ exports.ensureAuthenticated = async function (req, res, next) {
 
 exports.ensureIsStaff = async function (req, res, next) {
     if (!req.headers.authorization) {
-        return res.status(403).send({ message: "authentication error" });
+        return res.status(403).send({ message: "authentication error Not provided " });
     }
     
     var token = req.headers.authorization.split(" ")[1];
     var user = await UserService.authUser(token)
-    if (!user || !user.isStaff) {
+    if (!user || !user.is_staff) {
         return res.status(403).send({ message: "authentication error" });
     }
     req.user = user;
     next();
 }
+

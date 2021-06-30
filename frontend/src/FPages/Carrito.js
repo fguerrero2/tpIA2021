@@ -17,11 +17,7 @@ import Box from '@material-ui/core/Box';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
-import order from '../Data/order.js'; 
-import modosEntrega from '../Data/modosEntrega.js'; 
-import sucursales from '../Data/sucursales.js'
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -60,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
+    //border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
@@ -70,28 +66,65 @@ function ccyFormat(num) {
   return `${num.toFixed(2)}`;
 }
 
+
+
+
 function Carrito() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [modoEntrega,setModoEntrega] = React.useState('');
-  const [sucursal,setSucursal] = React.useState('');
+  const [data, setData] = React.useState(null);
+  const history = useHistory();
+  
+  React.useEffect(() => {
+    let token = localStorage.getItem("token")
+		fetch(`http://localhost:4000/api/orders/cart`, {
+			method: 'GET',
+      headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `token ${token}`,
+      },
+    })
+		.then(res => res.json())
+		.then(res => setData(res))
+  }, [])
+
+  function deleteItem(id) {
+    let token = localStorage.getItem("token")
+    fetch(`http://localhost:4000/api/orders/cart/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `token ${token}`,
+      },
+    })
+    let newData = {...data, items: data.items.filter((x) => x.id !== id)}
+    newData.total = newData.items.reduce((a,b) => a + b.subtotal, 0);
+    setData(newData)
+  }
 
   const handleOpen = () => {
     setOpen(true);
   };
 
+  const handleOk = () => {
+    let token = localStorage.getItem("token")
+    fetch(`http://localhost:4000/api/orders/cart`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `token ${token}`,
+      },
+      body: JSON.stringify({}),
+    })
+    history.push("/");
+    setOpen(false);
+  }
+
   const handleClose = () => {
     setOpen(false);
   };
-
-  const handleChangeModoEntrega = (event) => {
-    setModoEntrega(event.target.value);
-  };
-
-  const handleChangeSucursal = (event) => {
-    setSucursal(event.target.value);
-  };
-
+  if (!data){
+    return (<div></div>)
+  }
   return (
     <React.Fragment>
       <NavBar /> 
@@ -114,20 +147,19 @@ function Carrito() {
            </TableRow>
           </TableHead>
           <TableBody>
-           {order.items.map((x) => (
-              <TableRow key={x.producto_id}>
+           {data.items.map((x) => (
+              <TableRow key={x.product_id}>
                 <TableCell>
                 <Avatar variant="square" src={x.product.img} />
-                
                 </TableCell>
                 <TableCell>{x.product.name}</TableCell>
                 <TableCell>{x.size}</TableCell>
                 <TableCell>{x.color}</TableCell>
-                <TableCell>{x.color}</TableCell>
-                <TableCell align="right">  $ {ccyFormat (x.subtotal)}  </TableCell>
+                <TableCell>{x.quantity}</TableCell>
+                <TableCell align="right">  $ {ccyFormat (x.price)}  </TableCell>
                 <TableCell align="right" > $ {ccyFormat (x.subtotal)} </TableCell>
                 <TableCell >
-                  <IconButton aria-label="delete" className={classes.margin}>
+                  <IconButton aria-label="delete" className={classes.margin} onClick={() => deleteItem(x.id)} >
                    <DeleteIcon />
                   </IconButton>
                 </TableCell>
@@ -135,84 +167,31 @@ function Carrito() {
             ))}
             <TableRow >
             <TableCell  colSpan={2}> <Typography variant="h6"  component="h6" > Total</Typography></TableCell>
-            <TableCell align="right"><Typography component="h6" > $ {ccyFormat(order.total)} </Typography></TableCell>
+            <TableCell align="right"><Typography component="h6" > $ {ccyFormat(data.total)} </Typography></TableCell>
             </TableRow>     
           </TableBody>
         </Table>
         <Container className={classes.cardGrid}   maxWidth="lg" >
+        <div> <p> El pedido se retira por la Suscural </p></div>
         <Button variant="contained" color="primary" onClick={handleOpen} >
           comprar
         </Button>
         </Container>
-       <Box mt={30}> 
-       </Box>
-       <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={open}>
-          <div className={classes.paper}>
-            <h2 id="transition-modal-title">Modo de entrega</h2>
-            <p id="transition-modal-description">Elija el modo de entrega y la direccion</p>
-            <TextField
-              id="modoEntrega"
-              name="modoEntrega"
-              label="Modo de entrega"
-              defaultValue={modoEntrega}
-              select
-              variant="outlined"
-              required
-              fullWidth
-              onChange={handleChangeModoEntrega}
-              helperText="                     ."
-              >
-                {modosEntrega.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                    </MenuItem>
-                ))}
-            </TextField>
-            <TextField
-              id="sucursal"
-              name="sucursal"
-              label="Sucursal de retiro"
-              defaultValue={sucursal}
-              select
-              variant="outlined"
-              required
-              fullWidth
-              onChange={handleChangeSucursal}
-              helperText="                    ."
-              >
-                {sucursales.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                    {option.value+' - '+option.label}
-                    </MenuItem>
-                ))}
-            </TextField>
-            <Box/>
-            <TextField
-                      defaultValue=""
-                      name="direccion"
-                      variant="outlined"
-                      required
-                      fullWidth
-                      id="direccion"
-                      label="Direccion de entrega"
-                      helperText="                      ."
-                    >
-            </TextField>
-          </div>
-        </Fade>
-      </Modal>
+       <Box mt={30}>  </Box>
+       <Modal className={classes.modal} open={open}
+              onClose={handleClose}
+              BackdropComponent={Backdrop} >
+          <Fade in={open}>
+            <div className={classes.paper}>
+              <h2>  Pedido Confirmado  </h2>
+              <p > El Pedido fue confirmado y  se puede retirar despues de 5 dias habiles por la sucursal</p>
+              <Button variant="contained" color="primary" onClick={handleOk} >
+                Aceptar 
+              </Button>
+              <Box/>
+            </div>
+          </Fade>
+        </Modal>
       </Container>  
       </main>
       <div >

@@ -17,6 +17,13 @@ router.post('/orders/cart/',
   UserController.ensureAuthenticated, 
   OrderController.postOrderCart) // create / update
 
+router.post('/orders/cart/add',
+  UserController.ensureAuthenticated, 
+  OrderController.postOrderCartAdd) // add item to cart
 
-// Export the Router
+router.delete('/orders/cart/:id',
+  UserController.ensureAuthenticated, 
+  OrderController.deleteOrderCartItem) // delete item to cart
+
+  // Export the Router
 module.exports = router;

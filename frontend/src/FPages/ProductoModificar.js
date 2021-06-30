@@ -37,9 +37,13 @@ function ProductoModificar() {
     }
 
     React.useEffect(() => {
+      let token = localStorage.getItem("token")
       fetch(`http://localhost:4000/api/products/${id}`, {
         method: 'GET',
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `token ${token}`
+        },
       })
       .then(res => res.json())
       .then(res => setProduct(res))

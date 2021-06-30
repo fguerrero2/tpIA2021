@@ -69,7 +69,7 @@ const NavBar = () => {
         <Grid item xs="3" >
           <div align="right" >
             { name ?
-            <>name  
+            <> { name}  
             <IconButton color="#607d8b" aria-label="add to shopping cart" onClick={logout}>
               <ExitToAppIcon /> 
             </IconButton>

@@ -19,9 +19,13 @@ function ProductoAgregar() {
     }
 
     const createProduct = () => {
+      let token = localStorage.getItem("token")
       fetch(`http://localhost:4000/api/products/`, {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `token ${token}`
+        },
         body: JSON.stringify(product),
       })
       .then(res => res.json())

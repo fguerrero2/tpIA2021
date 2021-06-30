@@ -69,7 +69,7 @@ function Row(props) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
-
+  console.log("row...", row)
   return (
     <React.Fragment>
       <TableRow className={classes.root}>
@@ -78,16 +78,11 @@ function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell>{row.nro_orden}</TableCell>
-        <TableCell align="left">{row.usuario}</TableCell>
-        <TableCell align="left">{row.fecha}</TableCell>
-        <TableCell align="right">$ {ccyFormat (row.total)}</TableCell>
-        { modosEntrega.filter((filtro) => filtro.value === row.modo_entrega).map(modo =>(
-          <TableCell align="right">{modo.label}</TableCell>
-        ))}
-        <TableCell align="right">{row.direccion_entrega}</TableCell>
-        <TableCell align="right">{row.fecha_entrega}</TableCell>
-        <TableCell align="right">{row.estado}</TableCell>
+        <TableCell>{row._id.slice(-6)}</TableCell>
+        <TableCell align="left">{row.email}</TableCell>
+        <TableCell align="left">{row.date.slice(0,10)}</TableCell>
+        <TableCell align="right">$ {ccyFormat(row.total)}</TableCell>
+        <TableCell align="right">{row.status === "pending"? "Pendiente" : "Finalizado"}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
@@ -101,30 +96,26 @@ function Row(props) {
                   <TableRow>
                     <TableCell>Item</TableCell>
                     <TableCell>Producto</TableCell>
-                    <TableCell>Descripcion</TableCell>
                     <TableCell>Talle</TableCell>
                     <TableCell>Color</TableCell>
                     <TableCell align="right">Cantidad</TableCell>
                     <TableCell align="right">Unitario</TableCell>
-                    <TableCell align="right">Total ($)</TableCell>
+                    <TableCell align="right">Subtotal ($)</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.items.map((items) => (
-                    <TableRow key={items.item_id}>
+                  {row.items.map((item) => (
+                    <TableRow key={item.id}>
                       <TableCell component="th" scope="row">
-                        {items.item_id}
+                        {item.id.slice(-6)}
                       </TableCell>
-                      <TableCell component="th" scope="row">
-                        {items.product_id}
-                      </TableCell>
-                      <TableCell>{items.name}</TableCell>
-                      <TableCell>{items.size}</TableCell>
-                      <TableCell>{items.color}</TableCell>
-                      <TableCell align="right">{items.quantity}</TableCell>
-                      <TableCell align="right">$ {ccyFormat (items.price)}</TableCell>
+                      <TableCell>{item.product.name}</TableCell>
+                      <TableCell>{item.size}</TableCell>
+                      <TableCell>{item.color}</TableCell>
+                      <TableCell align="right">{item.quantity}</TableCell>
+                      <TableCell align="right">$ {ccyFormat (item.price)}</TableCell>
                       <TableCell align="right">
-                        $ {ccyFormat (Math.round(items.quantity*items.price))}
+                        $ {ccyFormat (Math.round(item.subtotal))}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -166,10 +157,24 @@ Row.propTypes = {
 };
 
 
-
-
 function AdminOrden() {
   const classes = useStyles();
+  const [items, setItems]= React.useState([]);
+  React.useEffect(() => {
+    let token = localStorage.getItem("token")
+    fetch("http://localhost:4000/api/orders/", {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `token ${token}`
+      },
+    })
+    .then(res => res.json())
+    .then(res => { 
+      console.log(res)
+      setItems(res)
+    })
+  }, [])
 
   return (
     <React.Fragment>
@@ -186,26 +191,21 @@ function AdminOrden() {
                     <TableRow>
                         <TableCell></TableCell>
                         <TableCell>Numero Orden</TableCell>
-                        <TableCell align="left">suario </TableCell>
+                        <TableCell align="left">Usuario </TableCell>
                         <TableCell align="left">Fecha</TableCell>
                         <TableCell align="right">Total</TableCell>
-                        <TableCell align="right">Modo de entrega </TableCell>
-                        <TableCell align="right">Direccion de entrega</TableCell>
-                        <TableCell align="right">Fecha de entrega </TableCell>
-                        <TableCell align="right">Estado </TableCell>
+                        <TableCell align="right">Entrega </TableCell>
                   </TableRow>
                   </TableHead>
                   <TableBody>
-                  {orderlist.map((row) => (
-                      <Row key={row.nro_orden} row={row} />
+                  {items.map((row) => (
+                      <Row key={row._id} row={row} />
                   ))}
                   </TableBody>
                 </Table>
               </TableContainer>
       </Container>
       
-
-
       </main>
       {/* Footer */}
       <div >
