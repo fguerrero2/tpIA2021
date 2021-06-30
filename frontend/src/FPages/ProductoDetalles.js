@@ -14,6 +14,7 @@ import Box from '@material-ui/core/Box';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -60,8 +61,14 @@ function ProductoDetalles (){
 	const [open, setOpen] = React.useState(false);
 
 	const handleClose = () => {setOpen(false)};
+	const history = useHistory();
+
 	const handleSubmit = async () => {
 		let token = localStorage.getItem("token")
+		if (!token) {
+			history.push("/login");
+			return null
+		}
 		let res = await fetch(`http://localhost:4000/api/orders/cart/add`, {
 			method: 'POST',
 			headers: {
