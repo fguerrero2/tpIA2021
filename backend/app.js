@@ -13,6 +13,7 @@ var cors = require('cors');
 var apiRouterUser = require('./routes/user'); 
 var apiRouterProducts = require('./routes/products'); 
 var apiRouterOrder = require('./routes/order'); 
+var apiRouterUtils = require('./routes/utils');
 
 //instancio el servidor
 var app = express();
@@ -39,6 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api', apiRouterUser);
 app.use('/api', apiRouterProducts);
 app.use('/api', apiRouterOrder);
+app.use('/api', apiRouterUtils);
 
 //console.log("processENV",process.env);
 if (process.env.NODE_ENV === 'Development') {
